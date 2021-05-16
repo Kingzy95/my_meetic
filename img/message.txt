@@ -1,0 +1,92 @@
+<?php
+session_start();
+    $bdd = new PDO('mysql:host:=localhost;dbname=meetic;port=3308;charset=utf8', 'root', 'root');
+    $bdd->setAttribute(PDO::ATTR_ERRMODE,
+        PDO::ERRMODE_EXCEPTION);
+$villeid = $bdd->query("SELECT ville FROM inscription ORDER BY id DESC");
+
+if(isset($_GET['ville']) AND !empty($_GET['ville'])) {
+	$ville = htmlspecialchars($_GET['ville']);
+	$searchville = $bdd->query('SELECT ville FROM inscription WHERE ville LIKE "%'.$ville.'%" ORDER BY id DESC');
+	
+}
+ 
+
+?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Document sans titre</title>
+</head>
+
+<body>
+	<h1>Recherche</h1>
+	<form method="GET">
+			 <div>
+        <label for="homme">Je recherche:</label>
+		
+                <input type="radio" id="homme" name="sexe" value="Homme"class="radio">
+		<label for = "homme">Un homme</label>
+	
+		
+		        <input type="radio" id="femme" name="sexe" value="Femme"class="radio">
+		<label for = "femme">Une femme</label>
+		
+		        <input type="radio" id="autre" name="sexe" value="Autre"class="radio">
+		<label for = "autre">Autre</label>
+	</div>
+			 <br>
+			 <div>
+			<label for="jeuxvideo">Par loisirs:</label>
+			<input type="checkbox" id="jeuxvideo" name="loisir" value="jeuxvideo" >
+			<label for="jeuxvideo">Jeux vidéo</label>
+			
+						<input type="checkbox" id="cinema" name="loisir" value="cinema">
+			<label for="cinema">Cinema</label>
+			
+						<input type="checkbox" id="lecture" name="loisir" value="lecture">
+			<label for="lecture">Lecture</label>
+			
+						<input type="checkbox" id="sport" name="loisir" value="sport">
+			<label for="sport">Sport</label>
+			
+						<input type="checkbox" id="informatique" name="loisir" value="informatique">
+			<label for="informatique">Informatique</label>
+			
+		</div>
+			 <br>
+			 		<div>
+			<label for="naissance">age minimum :</label>
+			<input type="date" id="naissance" name="nais" value="<?php if(isset($nais)) { echo $nais; } ?>">
+		</div>
+		<div>
+			<label for="naissance">age maximum :</label>
+			<input type="date" id="naissance" name="nais" value="<?php if(isset($nais)) { echo $nais; } ?>">
+		</div>
+			 <br>
+            <table>
+               <tr>
+                  <td align="left">
+                     <label for="ville">Par ville :</label><br><br>
+                  </td>
+                  <td>
+                     <input type="search" placeholder="Ville" id="ville" name="ville" class="input"/><br><br>
+                  </td>
+               </tr>
+               <tr>
+                  <td></td>
+                  <td align="left">
+                     <br />
+                     <input type="submit" value="rechercher" /><br><br>
+                  </td>
+               </tr>
+            </table>
+         </form>
+	   <?php while($a = $villeid->fetch()) { ?>
+      <li><?= $a['ville'] ?></li>
+   <?php } ?>
+	
+</body>
+</html>
